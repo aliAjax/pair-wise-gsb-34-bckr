@@ -45,11 +45,17 @@ CREATE TABLE IF NOT EXISTS inspection_result (
 CREATE TABLE IF NOT EXISTS hazard_ticket (
   id INTEGER PRIMARY KEY,
   result_id TEXT,
+  device_id TEXT,
+  item_code TEXT,
   severity TEXT,
   owner_id TEXT,
   deadline TEXT,
   rectify_status TEXT,
   rectify_note TEXT,
+  rectify_photo_url TEXT,
+  merged_result_ids TEXT,
+  rectified_at TEXT,
+  recheck_note TEXT,
   closed_at TEXT
 );
 

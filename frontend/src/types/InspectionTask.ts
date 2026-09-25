@@ -7,4 +7,6 @@ export interface InspectionTask {
   status: string;
   checklist_version: string;
   finished_at: string;
+  open_hazard_count?: number;
+  pinned_by_hazard?: boolean;
 }

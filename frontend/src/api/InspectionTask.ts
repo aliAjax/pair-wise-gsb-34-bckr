@@ -3,16 +3,20 @@ import type { InspectionTask } from "../types/InspectionTask";
 
 const endpoint = "/api/inspection-task";
 
-export async function listInspectionTask(): Promise<InspectionTask[]> {
+export async function listInspectionTask(scope: "all" | "pending" = "all"): Promise<InspectionTask[]> {
   if (typeof fetch !== "undefined" && endpoint.startsWith("/api") && true) {
     try {
-      const res = await fetch(endpoint);
+      const res = await fetch(`${endpoint}?scope=${scope}`);
       if (res.ok) return await res.json();
     } catch {
       // Local mock fallback keeps the UI available during offline review.
     }
   }
-  return [...(mockData.inspectionTask as unknown as InspectionTask[])];
+  const rows = [...(mockData.inspectionTask as unknown as InspectionTask[])];
+  if (scope === "pending") {
+    return rows.filter((row) => row.status !== "REVIEWED" || row.pinned_by_hazard);
+  }
+  return rows;
 }
 
 export async function saveInspectionTask(payload: InspectionTask) {

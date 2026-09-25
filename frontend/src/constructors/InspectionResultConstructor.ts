@@ -4,11 +4,11 @@ export const createDefaultInspectionResult = (overrides: Partial<InspectionResul
   id: 1 as never,
   task_id: 1 as never,
   device_id: 1 as never,
-  item_code: "item code 1" as never,
-  result_status: "IN_PROGRESS" as never,
-  measured_value: "measured value 1" as never,
-  photo_url: "/mock/photo_url-1.png" as never,
-  note: "note 1" as never,
+  item_code: "PRESSURE" as never,
+  result_status: "PASS" as never,
+  measured_value: "" as never,
+  photo_url: "" as never,
+  note: "" as never,
   ...overrides
 });
 

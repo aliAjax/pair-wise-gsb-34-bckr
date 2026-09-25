@@ -7,4 +7,5 @@ class HazardTicket(BaseModel):
     deadline: str
     rectify_status: str
     rectify_note: str
+    rectify_photo_url: str
     closed_at: str

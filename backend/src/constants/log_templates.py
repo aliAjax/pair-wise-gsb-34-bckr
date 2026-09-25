@@ -9,13 +9,18 @@ LOG_TEMPLATES = {
     "FireDevice.create",
     "FireDevice.update",
     "FireDevice.status",
-    "FireDevice.export"
+    "FireDevice.export",
+    "FireDevice.hazard_open",
+    "FireDevice.hazard_cleared",
+    "FireDevice.status_blocked"
   ],
   "InspectionTask": [
     "InspectionTask.create",
     "InspectionTask.update",
     "InspectionTask.status",
-    "InspectionTask.export"
+    "InspectionTask.export",
+    "InspectionTask.complete",
+    "InspectionTask.complete_blocked"
   ],
   "InspectionResult": [
     "InspectionResult.create",
@@ -27,6 +32,9 @@ LOG_TEMPLATES = {
     "HazardTicket.create",
     "HazardTicket.update",
     "HazardTicket.status",
-    "HazardTicket.export"
+    "HazardTicket.export",
+    "HazardTicket.merge",
+    "HazardTicket.rectify",
+    "HazardTicket.close"
   ]
 }

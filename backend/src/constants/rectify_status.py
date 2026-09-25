@@ -1,0 +1,1 @@
+RectifyStatus = ["OPEN", "RECHECK", "CLOSED"]

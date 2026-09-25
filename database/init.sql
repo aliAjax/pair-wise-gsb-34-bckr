@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS hazard_ticket (
   deadline TEXT,
   rectify_status TEXT,
   rectify_note TEXT,
+  rectify_photo_url TEXT,
   closed_at TEXT
 );
 

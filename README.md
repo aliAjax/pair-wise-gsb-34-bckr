@@ -56,7 +56,20 @@ backend/src/routes, controllers, services, models, repositories, middlewares, co
 
 - DeviceType: constants/DeviceType、types/DeviceType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - InspectionStatus: constants/InspectionStatus、types/InspectionStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
-- HazardSeverity: constants/HazardSeverity、types/HazardSeverity、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- HazardSeverity: constants/HazardSeverity、types/HazardSeverity、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用；严重度策略（责任人/期限）见后端 `constants/hazard_severity.py` 的 `SEVERITY_POLICY` 与前端 `constants/HazardSeverity.ts` 的 `HazardSeverityPolicy`。
+- RectifyStatus（OPEN/RECHECK/CLOSED）: 后端 `constants/rectify_status.py`，前端 `constants/RectifyStatus.ts`、`types/RectifyStatus.ts`，并出现在 logTemplates、statusText、HazardsPage 与隐患单状态流转按钮显隐中。
+- DeviceStatus（NORMAL/HAZARD_OPEN）: 后端 `constants/device_status.py`，前端 `constants/DeviceStatus.ts`、`types/DeviceStatus.ts`，并出现在 statusText、DevicesPage 状态徽标与“登记正常”守卫中。
+- ResultStatus（PASS/FAIL）: 后端 `constants/result_status.py`，前端 `constants/ResultStatus.ts`、`types/ResultStatus.ts`，并出现在 statusText、HazardsPage 不合格项列表与 TasksPage 检查项面板中。
+
+## 台账与隐患联动规则
+
+设备台账（FireDevice.status）与隐患处理（HazardTicket.rectify_status）强绑定，规则由后端 service 强制，前端只做展示和入口：
+
+1. **合并生成**：仅 `FAIL` 的巡检结果可生成隐患单（`POST /api/hazard-ticket`）；同一设备同一检查项只保留一张有效（未关闭）隐患单，重复异常合并进原单——严重度取高者并按 `SEVERITY_POLICY` 重算责任人和期限，单据指向最新异常结果；若原单在复验中（RECHECK）则打回待整改（OPEN）且旧整改证据作废。
+2. **严重度策略**：LOW/MEDIUM/HIGH/CRITICAL 分别派给维保员/维保班长/维保主管/物业工程负责人，期限 30/7/3/1 天，责任人和期限不接受外部传入。
+3. **整改进复验**：维保人员（maintainer）必须同时提交现场照片和修复说明（`POST /api/hazard-ticket/{id}/rectify`），缺任一项报 `RECTIFY_EVIDENCE_REQUIRED`，单据才从 OPEN 进入 RECHECK。
+4. **复验关单**：仅物业主管（supervisor）可关单（`POST /api/hazard-ticket/{id}/close`），且必须在 RECHECK 状态；关单后若该设备无其他有效隐患，台账自动恢复 NORMAL。
+5. **台账守卫**：设备存在有效隐患时，`POST /api/fire-device/{id}/status` 登记 NORMAL 报 `DEVICE_HAS_OPEN_HAZARD`（409）；所属巡检任务 `POST /api/inspection-task/{id}/complete` 同样被拦截，设备不能从任务清单消失。
 
 ## 为什么会牵一发动全身
 
